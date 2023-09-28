@@ -86,11 +86,7 @@ client.on("error", function (err) {
   client.end();
 });
 
-app.post("/", (req, res)=> {
-  console.log(req.body)
 
-})
-
-app.listen(1234, () => {
-  console.log("Server is listening on port 1234.");
+app.listen(8080, () => {
+  console.log("Server is listening on port 8080.");
 });
