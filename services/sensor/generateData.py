@@ -19,7 +19,7 @@ if __name__ == "__main__":
             event_id = str(uuid.uuid4())
             
             # Generate a Unix timestamp
-            event_origin = int(time.time() * 1e9)  # Convert to nanoseconds
+            event_origin = int(time.time() * 1e9)
             
             # Extract values from the CSV row
             temp = float(row['Temperature[C]'])
@@ -29,8 +29,7 @@ if __name__ == "__main__":
             h2 = int(row['Raw H2'])
             ethanol = int(row['Raw Ethanol'])
             pressure = float(row['Pressure[hPa]'])
-              
-            
+                          
             # Create the event JSON structure
             event = {
                 "apiVersion": "v2",

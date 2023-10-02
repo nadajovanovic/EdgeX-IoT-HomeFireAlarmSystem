@@ -1,15 +1,19 @@
-import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import mqtt from "mqtt";
 
 
 let client;
-let currentValue = "ENABLED";
+let currentValue = "ENABLE";
 
 (async () => {
-  client = mqtt.connect(`mqtt://broker.hivemq.com`);
-  console.log("success");
+  client = mqtt.connect({
+    host: "edgex-mqtt-broker",
+    port: 1883,
+    protocol: "mqtt",
+    protocolVersion: 4,
+  });
+  console.log("Successfully connected to MQTT!");
 })().catch((error) => {
   console.log("caught", error.message);
 });
@@ -20,8 +24,8 @@ app.use(cors());
 
 client.on("connect", function () {
   try {
-    client.subscribe("notification");
-    console.log("subscribed");
+    client.subscribe("Notifications");
+    console.log("Subscribed topic 'Notifications'");
   } catch (err) {
     console.log("err subscribe", err);
   }
@@ -68,12 +72,12 @@ client.on("message", function (topic, message) {
 
 async function sendAlert(command) {
   const url =
-    "http://127.0.0.1:59882/api/v2/device/name/Fishpond-Device/temp_reg";
+    "http://edgex-core-command:59882/api/v2/device/name/SmokeDetector/FireAlarm";
   try {
     const res = await fetch(url, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({  "temp_reg": command }),
+      body: JSON.stringify({  "FireAlarm": command }),
     });
     console.log(res.status);
   } catch (error) {
@@ -82,7 +86,7 @@ async function sendAlert(command) {
 }
 
 client.on("error", function (err) {
-  console.log("error", err);
+  console.log("ERROR client on:", err);
   client.end();
 });
 
